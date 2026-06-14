@@ -90,5 +90,5 @@ Action<T> - делегат, що приймає аргумент і нічого
 - **Тег:** v9.0
 
 ### Граф гілок
+<img width="1280" height="640" alt="image" src="https://github.com/user-attachments/assets/210721b6-8860-4c4c-ab88-3f12523adf51" />
 
-(ВСТАВИТИ СЮДИ СКРИНШОТ ГРАФА git log --oneline --graph --all)
