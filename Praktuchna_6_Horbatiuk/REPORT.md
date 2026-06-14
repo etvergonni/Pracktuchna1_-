@@ -115,5 +115,6 @@ public double GetTotalAreaOfAllShapes()
 - **Тег:** v6.0
 
 ### Граф гілок
+<img width="1280" height="730" alt="image" src="https://github.com/user-attachments/assets/b883fba9-228b-4180-bb48-66a5ab9d3c7e" />
 
-(ВСТАВИТИ СЮДИ СКРИНШОТ ГРАФА git log --oneline --graph --all)
+
