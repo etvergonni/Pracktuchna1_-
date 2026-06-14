@@ -92,5 +92,5 @@ System.Text.Json перетворює об'єкти у формат JSON (сер
 - **Тег:** v8.0
 
 ### Граф гілок
+<img width="1280" height="654" alt="image" src="https://github.com/user-attachments/assets/8be2cb6e-26a8-4cc2-955b-4204a8ad952c" />
 
-(ВСТАВИТИ СЮДИ СКРИНШОТ ГРАФА git log --oneline --graph --all)
