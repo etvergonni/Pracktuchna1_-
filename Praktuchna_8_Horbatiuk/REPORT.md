@@ -86,7 +86,7 @@ System.Text.Json перетворює об'єкти у формат JSON (сер
 
 - **Репозиторій:** https://github.com/etvergonni/Praktychni_Horbatiuk
 - **Кількість гілок (ПР №8):** 9 (develop, feature/file-manager, feature/json-serialization, feature/csv-export, feature/backup-system, feature/exception-handling, feature/menu-file-module, feature/variant-2, refactor/file-cleanup)
-- **Кількість комітів (ПР №8):** (ЗАПОВНИТИ після git)
+- **Кількість комітів (ПР №8):** 19
 - **Стиль повідомлень:** Conventional Commits (feat:, fix:, docs:, chore:, refactor:)
 - **Стратегія злиття:** git merge --no-ff для всіх гілок
 - **Тег:** v8.0
