@@ -93,7 +93,7 @@ public static bool operator !=(Point a, Point b) => !a.Equals(b);
 
 - **Репозиторій:** https://github.com/etvergonni/Praktychni_Horbatiuk
 - **Кількість гілок (ПР №7):** 9 (develop, feature/structs-core, feature/point-grade-structures, feature/performance-testing, feature/studentrecord-integration, feature/group-optimization, feature/menu-structures, feature/variant-2, refactor/structs-cleanup)
-- **Кількість комітів (ПР №7):** (ЗАПОВНИТИ після git)
+- **Кількість комітів (ПР №7):** 18
 - **Стратегія злиття:** git merge --no-ff для всіх гілок, застосовано git rebase для чищення історії
 - **Тег:** v7.0
 
