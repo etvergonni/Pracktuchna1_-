@@ -84,7 +84,7 @@ Action<T> - делегат, що приймає аргумент і нічого
 
 - **Репозиторій:** https://github.com/etvergonni/Praktychni_Horbatiuk
 - **Кількість гілок (ПР №9):** 9 (develop, feature/delegates-core, feature/events-system, feature/lambda-predicates, feature/func-action-integration, feature/studentgroup-events, feature/menu-delegates, feature/variant-2, refactor/delegates-cleanup)
-- **Кількість комітів (ПР №9):** (ЗАПОВНИТИ після git)
+- **Кількість комітів (ПР №9):** 20
 - **Стиль повідомлень:** Conventional Commits (feat:, fix:, docs:, chore:, refactor:)
 - **Стратегія злиття:** git merge --no-ff для всіх гілок
 - **Тег:** v9.0
