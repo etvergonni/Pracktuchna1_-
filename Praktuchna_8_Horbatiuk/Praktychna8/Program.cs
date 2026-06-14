@@ -1,0 +1,1370 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using Praktychna8;
+
+Console.OutputEncoding = Encoding.UTF8;
+
+var group = new StudentGroup
+{
+    GroupName = "К-320",
+    Specialization = "Комп'ютерна інженерія",
+    Course = 3
+};
+var logger = new AdvancedLogger();
+var mood = new GroupMoodAnalyzer();
+
+SeedDemoData();
+logger.Info("Програму запущено");
+
+bool running = true;
+while (running)
+{
+    ShowMenu();
+    Console.Write("Ваш вибір: ");
+    string choice = (Console.ReadLine() ?? "").Trim();
+    Console.WriteLine();
+
+    switch (choice)
+    {
+        case "1": AddStudent(); break;
+        case "2": RemoveStudent(); break;
+        case "3": ShowAllStudents(); break;
+        case "4": FindStudent(); break;
+        case "5": EditStudent(); break;
+        case "6": ShowExcellentAndFailing(); break;
+        case "7": ShowStatistics(); break;
+        case "8": SaveGroup(); break;
+        case "9": LoadGroup(); break;
+        case "10": SearchByFragment(); break;
+        case "11": ShowGroupReport(); break;
+        case "12": NormalizeAllNotes(); break;
+        case "13": CheckPalindromesInNotes(); break;
+        case "14": ExportCsv(); break;
+        case "15": ImportFromText(); break;
+        case "16": ShowLogs(); break;
+        case "17": ShowPerformance(); break;
+        case "18": TextProcessingMenu(); break;
+        case "19": CompareTwoStudents(); break;
+        case "20": MergeGroupsDemo(); break;
+        case "21": DemoVector(); break;
+        case "22": DemoGradePoint(); break;
+        case "23": FindBest(); break;
+        case "24": TestOperators(); break;
+        case "25": AddRegularStudent(); break;
+        case "26": AddSpecialStudent(); break;
+        case "27": ShowAllMembers(); break;
+        case "28": CalculateScholarships(); break;
+        case "29": ShowByType(); break;
+        case "30": TestHierarchy(); break;
+        case "31": DemoVehicles(); break;
+        case "32": AddShape(); break;
+        case "33": ShowAllShapes(); break;
+        case "34": CalcTotalArea(); break;
+        case "35": ResizeShapes(); break;
+        case "36": DrawShapes(); break;
+        case "37": PrintShapesInfo(); break;
+        case "38": DemoDynamicBinding(); break;
+        case "39": DemoPayments(); break;
+        case "40": DemoStructs(); break;
+        case "41": ComparePerformance(); break;
+        case "42": ConvertToRecord(); break;
+        case "43": ShowGradeHistory(); break;
+        case "44": TestEquals(); break;
+        case "45": OptimizeStorage(); break;
+        case "46": DemoMoney(); break;
+        case "47": SaveGroupJson(); break;
+        case "48": LoadGroupJson(); break;
+        case "49": ExportGradesCsv(); break;
+        case "50": SaveReportText(); break;
+        case "51": CreateBackupFile(); break;
+        case "52": ViewBackups(); break;
+        case "53": ImportStudentsText(); break;
+        case "54": CleanBackups(); break;
+        case "55": TestExceptions(); break;
+        case "56": ImportStudentsCsv(); break;
+        case "0":
+            running = false;
+            logger.Info("Вихід із програми");
+            Console.WriteLine("До побачення!");
+            break;
+        default:
+            Console.WriteLine("Невідома команда, спробуйте ще раз.");
+            break;
+    }
+
+    if (running)
+    {
+        Console.WriteLine("\nНатисніть Enter, щоб продовжити...");
+        Console.ReadLine();
+        Console.Clear();
+    }
+}
+
+void ShowMenu()
+{
+    Console.WriteLine("===== СИСТЕМА УПРАВЛІННЯ ГРУПОЮ (ПР №5) =====");
+    Console.WriteLine(" 1. Додати студента        2. Видалити студента");
+    Console.WriteLine(" 3. Вивести всіх студентів 4. Пошук студента");
+    Console.WriteLine(" 5. Редагувати студента    6. Відмінники / відстаючі");
+    Console.WriteLine(" 7. Статистика групи       8. Зберегти дані");
+    Console.WriteLine(" 9. Завантажити дані      10. Пошук за фрагментом ПІБ");
+    Console.WriteLine("11. Звіт групи            12. Нормалізувати нотатки");
+    Console.WriteLine("13. Паліндроми в нотатках 14. Експорт у CSV");
+    Console.WriteLine("15. Імпорт студентів      16. Логи системи");
+    Console.WriteLine("17. Тест продуктивності   18. Обробка тексту та аналіз");
+    Console.WriteLine("-- Оператори (ПР №4) --");
+    Console.WriteLine("19. Порівняти студентів   20. Об'єднати групи");
+    Console.WriteLine("21. Демо Vector           22. Демо GradePoint");
+    Console.WriteLine("23. Найкращий студент     24. Тест операторів");
+    Console.WriteLine("-- Ієрархія та наслідування (ПР №5) --");
+    Console.WriteLine("25. Додати звичайного студента");
+    Console.WriteLine("26. Додати відмінника / іноземного / працюючого / аспіранта");
+    Console.WriteLine("27. Вивести всіх членів університету (поліморфізм)");
+    Console.WriteLine("28. Розрахувати стипендію для всіх");
+    Console.WriteLine("29. Показати студентів за типом");
+    Console.WriteLine("30. Тестування ієрархії та base/override");
+    Console.WriteLine("31. Демонстрація Vehicle (Варіант ПР5)");
+    Console.WriteLine();
+    Console.WriteLine("Фігури та поліморфізм (ПР6):");
+    Console.WriteLine("32. Додати фігуру (коло / прямокутник / трикутник)");
+    Console.WriteLine("33. Вивести всі фігури (поліморфізм)");
+    Console.WriteLine("34. Розрахувати загальну площу всіх фігур");
+    Console.WriteLine("35. Змінити розмір усіх фігур");
+    Console.WriteLine("36. Намалювати всі фігури (симуляція)");
+    Console.WriteLine("37. Інфо про фігури через інтерфейс IPrintable");
+    Console.WriteLine("38. Демонстрація динамічного зв'язування");
+    Console.WriteLine("39. Демонстрація платежів (Варіант ПР6)");
+    Console.WriteLine();
+    Console.WriteLine("Структури (ПР7):");
+    Console.WriteLine("40. Демонстрація структур (Point, GradeRecord)");
+    Console.WriteLine("41. Порівняти продуктивність struct vs class");
+    Console.WriteLine("42. Перетворити студента у StudentRecord");
+    Console.WriteLine("43. Історія оцінок через структури");
+    Console.WriteLine("44. Тест Equals та IEquatable");
+    Console.WriteLine("45. Оптимізація зберігання даних групи");
+    Console.WriteLine("46. Демонстрація Money (Варіант ПР7)");
+    Console.WriteLine();
+    Console.WriteLine("Робота з файлами (ПР8):");
+    Console.WriteLine("47. Зберегти групу у JSON");
+    Console.WriteLine("48. Завантажити групу з JSON");
+    Console.WriteLine("49. Експорт оцінок у CSV");
+    Console.WriteLine("50. Зберегти звіт у текстовий файл");
+    Console.WriteLine("51. Створити резервну копію");
+    Console.WriteLine("52. Переглянути файли в папці Backups");
+    Console.WriteLine("53. Імпорт студентів з текстового файлу");
+    Console.WriteLine("54. Очистити старі бекапи");
+    Console.WriteLine("55. Тестування обробки винятків");
+    Console.WriteLine("56. Імпорт студентів з CSV (Варіант 2)");
+    Console.WriteLine(" 0. Вийти");
+    Console.WriteLine("============================================");
+}
+
+void SeedDemoData()
+{
+    var s1 = new Student("Горбатюк Олександра Іванівна", new DateTime(2005, 5, 12), "12345678")
+    {
+        Notes = "Активна студентка, відмінно показує себе, помітний прогрес.",
+        CourseProgress = 90
+    };
+    s1.Journal.SetGrade("Програмування", 95);
+    s1.Journal.SetGrade("Математика", 88);
+    s1.RecalculateFromJournal();
+    s1.GradePoints.Add(new GradePoint(9));
+    s1.GradePoints.Add(new GradePoint(8.5));
+    s1.AddProject(new Circle("червоний", 5));
+    s1.AddProject(new Rectangle("синій", 4, 6));
+    s1.AddProject(new Triangle("зелений", 3, 4, 5));
+    group.AddStudent(s1);
+
+    var s2 = new Student("Петренко Іван Сергійович", new DateTime(2004, 9, 3), "87654321")
+    {
+        Notes = "Є проблема з відвідуванням, накопичив борг, відстає.",
+        CourseProgress = 45
+    };
+    s2.Journal.SetGrade("Програмування", 60);
+    s2.Journal.SetGrade("Математика", 55);
+    s2.RecalculateFromJournal();
+    group.AddStudent(s2);
+
+    var s3 = new Student("Коваленко Марія Олегівна", new DateTime(2005, 1, 20), "11223344")
+    {
+        Notes = "Старанна, чудові результати, молодець.",
+        CourseProgress = 80
+    };
+    s3.Journal.SetGrade("Програмування", 90);
+    s3.Journal.SetGrade("Математика", 92);
+    s3.RecalculateFromJournal();
+    group.AddStudent(s3);
+
+    var ex = new ExcellentStudent("Шевченко Тарас Григорович", new DateTime(2005, 3, 9), "10101010", "Переможець олімпіади")
+    {
+        CourseProgress = 95
+    };
+    ex.Journal.SetGrade("Програмування", 98);
+    ex.Journal.SetGrade("Математика", 96);
+    ex.RecalculateFromJournal();
+    group.AddMember(ex);
+
+    var fs = new ForeignStudent("Сміт Джон Майкл", new DateTime(2004, 11, 15), "20202020", "США")
+    {
+        CourseProgress = 70
+    };
+    fs.Journal.SetGrade("Програмування", 80);
+    fs.RecalculateFromJournal();
+    group.AddMember(fs);
+
+    var ws = new WorkingStudent("Бондаренко Олег Петрович", new DateTime(2003, 6, 1), "30303030", "SoftServe", 20)
+    {
+        CourseProgress = 75
+    };
+    ws.Journal.SetGrade("Програмування", 85);
+    ws.RecalculateFromJournal();
+    group.AddMember(ws);
+}
+
+void AddStudent()
+{
+    try
+    {
+        Console.Write("ПІБ (три слова): ");
+        string name = Console.ReadLine() ?? "";
+        Console.Write("Номер заліковки (8 цифр): ");
+        string book = Console.ReadLine() ?? "";
+        Console.Write("Рік народження (напр. 2005): ");
+        int year = int.TryParse(Console.ReadLine(), out var y) ? y : 2005;
+        Console.Write("Прогрес навчання 0-100 (Enter = 0): ");
+        int progress = int.TryParse(Console.ReadLine(), out var p) ? p : 0;
+
+        var student = new Student(name, new DateTime(year, 1, 1), book)
+        {
+            CourseProgress = progress
+        };
+
+        Console.Write("Нотатки (Enter щоб пропустити): ");
+        string notes = Console.ReadLine() ?? "";
+        if (!string.IsNullOrWhiteSpace(notes)) student.Notes = notes;
+
+        group.AddStudent(student);
+        logger.Success($"Додано студента: {name}");
+        Console.WriteLine("Студента додано.");
+    }
+    catch (Exception ex)
+    {
+        logger.Error($"Помилка додавання: {ex.Message}");
+        Console.WriteLine($"Помилка: {ex.Message}");
+    }
+}
+
+void RemoveStudent()
+{
+    Console.Write("Номер заліковки для видалення: ");
+    string book = (Console.ReadLine() ?? "").Trim();
+    if (group.RemoveStudent(book))
+    {
+        logger.Warning($"Видалено студента із заліковкою {book}");
+        Console.WriteLine("Студента видалено.");
+    }
+    else
+    {
+        Console.WriteLine("Студента з таким номером не знайдено.");
+    }
+}
+
+void ShowAllStudents()
+{
+    var all = group.GetAllStudents();
+    if (all.Count == 0)
+    {
+        Console.WriteLine("У групі немає студентів.");
+        return;
+    }
+    Console.WriteLine($"Студентів у групі: {all.Count}");
+    int i = 1;
+    foreach (var s in all)
+        Console.WriteLine($"{i++}. {s.GetFormattedInfo()}");
+}
+
+void FindStudent()
+{
+    Console.Write("Номер заліковки: ");
+    string book = (Console.ReadLine() ?? "").Trim();
+    var s = group[book];
+    if (s is null)
+    {
+        Console.WriteLine("Студента не знайдено.");
+        return;
+    }
+    Console.WriteLine(s.GetFormattedInfo(true));
+}
+
+void EditStudent()
+{
+    Console.Write("Номер заліковки студента для редагування: ");
+    string book = (Console.ReadLine() ?? "").Trim();
+    var s = group[book];
+    if (s is null)
+    {
+        Console.WriteLine("Студента не знайдено.");
+        return;
+    }
+
+    Console.WriteLine($"Поточні нотатки: {s.Notes ?? "немає"}");
+    Console.Write("Нові нотатки (Enter щоб не змінювати): ");
+    string notes = Console.ReadLine() ?? "";
+    if (!string.IsNullOrWhiteSpace(notes)) s.Notes = notes;
+
+    Console.Write("Новий прогрес 0-100 (Enter щоб не змінювати): ");
+    string pr = Console.ReadLine() ?? "";
+    if (int.TryParse(pr, out var p))
+    {
+        try { s.CourseProgress = p; }
+        catch (Exception ex) { Console.WriteLine($"Прогрес не змінено: {ex.Message}"); }
+    }
+
+    logger.Info($"Відредаговано дані студента {s.FullName}");
+    Console.WriteLine("Дані оновлено.");
+}
+
+void ShowExcellentAndFailing()
+{
+    var excellent = group.GetExcellentStudents();
+    var failing = group.GetFailingStudents();
+
+    Console.WriteLine($"Відмінники ({excellent.Count}):");
+    if (excellent.Count == 0) Console.WriteLine("  немає");
+    foreach (var s in excellent)
+        Console.WriteLine($"  {s.FullName} - {s.AverageGrade:F2}");
+
+    Console.WriteLine($"\nВідстаючі ({failing.Count}):");
+    if (failing.Count == 0) Console.WriteLine("  немає");
+    foreach (var s in failing)
+        Console.WriteLine($"  {s.FullName} - {s.AverageGrade:F2}");
+}
+
+void ShowStatistics()
+{
+    var sb = new StringBuilder();
+    sb.AppendLine($"Група: {group.GroupName} ({group.Specialization}), курс {group.Course}");
+    sb.AppendLine($"Студентів: {group.GroupSize}, усього членів університету: {group.MembersCount}");
+    sb.AppendLine($"Середній бал групи: {group.AverageGroupGrade:F2}");
+    sb.AppendLine($"Відмінників: {group.GetExcellentStudents().Count} ({group.ExcellentPercent}%)");
+    sb.AppendLine($"Відстаючих: {group.GetFailingStudents().Count}");
+    sb.AppendLine("Розподіл за статусом:");
+    foreach (StudentStatus st in Enum.GetValues<StudentStatus>())
+        sb.AppendLine($"  {st}: {group.GetStudentsByStatus(st).Count}");
+    Console.Write(sb.ToString());
+}
+
+void SaveGroup()
+{
+    try
+    {
+        group.SaveToFile("group.json");
+        logger.Success("Групу збережено у group.json");
+        Console.WriteLine("Збережено у файл group.json");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка збереження: {ex.Message}");
+    }
+}
+
+void LoadGroup()
+{
+    try
+    {
+        group.LoadFromFile("group.json");
+        logger.Success("Групу завантажено з group.json");
+        Console.WriteLine($"Завантажено. Студентів: {group.GroupSize}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка завантаження: {ex.Message}");
+    }
+}
+
+void SearchByFragment()
+{
+    Console.Write("Фрагмент ПІБ: ");
+    string frag = Console.ReadLine() ?? "";
+    Console.Write(group.SearchByNameFragment(frag));
+}
+
+void ShowGroupReport()
+{
+    Console.Write(TextProcessor.BuildGroupReport(group));
+    logger.Info("Згенеровано повний звіт групи");
+}
+
+void NormalizeAllNotes()
+{
+    int changed = 0;
+    foreach (var s in group.GetAllStudents())
+    {
+        if (string.IsNullOrWhiteSpace(s.Notes)) continue;
+        string normalized = TextProcessor.Normalize(s.Notes);
+        if (normalized != s.Notes)
+        {
+            s.Notes = normalized;
+            changed++;
+        }
+    }
+    logger.Info($"Нормалізовано нотаток: {changed}");
+    Console.WriteLine($"Нотатки нормалізовано. Змінено записів: {changed}");
+}
+
+void CheckPalindromesInNotes()
+{
+    bool foundAny = false;
+    foreach (var s in group.GetAllStudents())
+    {
+        if (string.IsNullOrWhiteSpace(s.Notes)) continue;
+
+        var words = s.Notes.Split(
+            new[] { ' ', ',', '.', '!', '?', ';' }, StringSplitOptions.RemoveEmptyEntries);
+        var palindromes = words.Where(w => w.Length > 2 && TextProcessor.IsPalindrome(w)).ToList();
+
+        if (palindromes.Count > 0)
+        {
+            foundAny = true;
+            Console.WriteLine($"{s.FullName}: {string.Join(", ", palindromes)}");
+        }
+    }
+    if (!foundAny)
+        Console.WriteLine("Паліндромів у нотатках не знайдено.");
+}
+
+void ExportCsv()
+{
+    try
+    {
+        string csv = group.ExportToCsv();
+        Console.WriteLine(csv);
+        File.WriteAllText("students.csv", csv);
+        logger.Success("Експортовано у students.csv");
+        Console.WriteLine("Збережено у файл students.csv");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка експорту: {ex.Message}");
+    }
+}
+
+void ImportFromText()
+{
+    Console.WriteLine("Введіть студентів, кожен з нового рядка у форматі:");
+    Console.WriteLine("Прізвище Імя Побатькові;НомерЗаліковки;ДатаНародження");
+    Console.WriteLine("(порожній рядок завершує введення)");
+
+    var sb = new StringBuilder();
+    while (true)
+    {
+        string line = Console.ReadLine() ?? "";
+        if (string.IsNullOrWhiteSpace(line)) break;
+        sb.AppendLine(line);
+    }
+
+    try
+    {
+        int before = group.GroupSize;
+        group.ImportStudentsFromText(sb.ToString());
+        int added = group.GroupSize - before;
+        logger.Success($"Імпортовано студентів: {added}");
+        Console.WriteLine($"Додано студентів: {added}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка імпорту: {ex.Message}");
+    }
+}
+
+void ShowLogs()
+{
+    Console.WriteLine("--- Журнал подій ---");
+    Console.Write(logger.GetFullLog());
+    Console.WriteLine("--- Статистика журналу ---");
+    Console.Write(logger.GetStatistics());
+}
+
+void ShowPerformance()
+{
+    Console.Write("Кількість ітерацій (Enter = 20000): ");
+    string input = Console.ReadLine() ?? "";
+    int iter = int.TryParse(input, out var n) ? n : 20000;
+    Console.Write(TextProcessor.ComparePerformance(iter));
+    logger.Info($"Виконано тест продуктивності ({iter})");
+}
+
+void TextProcessingMenu()
+{
+    Console.WriteLine("--- Обробка тексту та аналіз ---");
+    Console.WriteLine("1. Перевернути рядок");
+    Console.WriteLine("2. Підрахувати слова");
+    Console.WriteLine("3. Підрахувати символи");
+    Console.WriteLine("4. Нормалізувати текст");
+    Console.WriteLine("5. Перевірити паліндром");
+    Console.WriteLine("6. Множинна заміна за словником");
+    Console.WriteLine("7. Розбити на речення");
+    Console.WriteLine("8. Аналіз настрою групи (Варіант ПР3)");
+    Console.Write("Вибір: ");
+    string c = (Console.ReadLine() ?? "").Trim();
+    Console.WriteLine();
+
+    if (c == "1")
+    {
+        Console.Write("Текст: ");
+        string t = Console.ReadLine() ?? "";
+        Console.WriteLine($"Результат: {TextProcessor.Reverse(t)}");
+    }
+    else if (c == "2")
+    {
+        Console.Write("Текст: ");
+        string t = Console.ReadLine() ?? "";
+        Console.WriteLine($"Кількість слів: {TextProcessor.CountWords(t)}");
+    }
+    else if (c == "3")
+    {
+        Console.Write("Текст: ");
+        string t = Console.ReadLine() ?? "";
+        Console.WriteLine($"Символів без пробілів: {TextProcessor.CountCharacters(t)}");
+        Console.WriteLine($"Символів з пробілами: {TextProcessor.CountCharacters(t, false)}");
+    }
+    else if (c == "4")
+    {
+        Console.Write("Текст із зайвими пробілами: ");
+        string t = Console.ReadLine() ?? "";
+        Console.WriteLine($"Нормалізовано: \"{TextProcessor.Normalize(t)}\"");
+    }
+    else if (c == "5")
+    {
+        Console.Write("Слово або фраза: ");
+        string t = Console.ReadLine() ?? "";
+        Console.WriteLine(TextProcessor.IsPalindrome(t) ? "Так, це паліндром." : "Ні, не паліндром.");
+    }
+    else if (c == "6")
+    {
+        Console.Write("Текст: ");
+        string t = Console.ReadLine() ?? "";
+        var dict = new Dictionary<string, string>();
+        Console.WriteLine("Заміни у форматі що=наЩо (порожній рядок завершує):");
+        while (true)
+        {
+            Console.Write("  заміна: ");
+            string line = Console.ReadLine() ?? "";
+            if (string.IsNullOrWhiteSpace(line)) break;
+            var p = line.Split('=');
+            if (p.Length == 2) dict[p[0]] = p[1];
+        }
+        Console.WriteLine($"Результат: {TextProcessor.ReplaceMultiple(t, dict)}");
+    }
+    else if (c == "7")
+    {
+        Console.Write("Текст із кількох речень: ");
+        string t = Console.ReadLine() ?? "";
+        var sentences = TextProcessor.SplitIntoSentences(t);
+        Console.WriteLine($"Знайдено речень: {sentences.Length}");
+        int i = 1;
+        foreach (var s in sentences)
+            Console.WriteLine($"  {i++}. {s}");
+    }
+    else if (c == "8")
+    {
+        Console.Write(mood.AnalyzeGroup(group));
+        Console.WriteLine();
+        Console.Write(mood.GetTopKeywords(group));
+    }
+    else
+    {
+        Console.WriteLine("Невідома команда.");
+    }
+
+    logger.Info("Використано обробку тексту");
+}
+
+void CompareTwoStudents()
+{
+    Console.Write("Заліковка першого студента: ");
+    var s1 = group[(Console.ReadLine() ?? "").Trim()];
+    Console.Write("Заліковка другого студента: ");
+    var s2 = group[(Console.ReadLine() ?? "").Trim()];
+
+    if (s1 is null || s2 is null)
+    {
+        Console.WriteLine("Один зі студентів не знайдений.");
+        return;
+    }
+
+    Console.WriteLine($"{s1.FullName}: бал {s1.AverageGrade:F2}, прогрес {s1.CourseProgress}%");
+    Console.WriteLine($"{s2.FullName}: бал {s2.AverageGrade:F2}, прогрес {s2.CourseProgress}%");
+
+    if (s1 > s2) Console.WriteLine($"Вищий бал у: {s1.FullName}");
+    else if (s1 < s2) Console.WriteLine($"Вищий бал у: {s2.FullName}");
+    else Console.WriteLine("Студенти рівні за балом і прогресом (оператор ==).");
+
+    logger.Info("Виконано порівняння студентів");
+}
+
+void MergeGroupsDemo()
+{
+    var other = new StudentGroup
+    {
+        GroupName = "К-321",
+        Specialization = "Комп'ютерна інженерія",
+        Course = 3
+    };
+    other.AddStudent(new Student("Сидоренко Олег Вікторович", new DateTime(2005, 3, 3), "55667788") { CourseProgress = 70 });
+    other.AddStudent(new Student("Мельник Анна Юріївна", new DateTime(2004, 7, 7), "99887766") { CourseProgress = 85 });
+
+    var combined = group + other;
+    Console.WriteLine($"Група А: {group.GroupName} ({group.GroupSize} студентів)");
+    Console.WriteLine($"Група Б: {other.GroupName} ({other.GroupSize} студентів)");
+    Console.WriteLine($"Об'єднана: {combined.GroupName} ({combined.GroupSize} студентів)");
+    foreach (var s in combined.GetAllStudents())
+        Console.WriteLine($"  {s.FullName}");
+
+    logger.Info("Виконано об'єднання груп");
+}
+
+void DemoVector()
+{
+    var v1 = new Vector(1, 2, 2);
+    var v2 = new Vector(3, 0, 4);
+
+    Console.WriteLine($"v1 = {v1}, довжина = {v1.Length:F2}");
+    Console.WriteLine($"v2 = {v2}, довжина = {v2.Length:F2}");
+    Console.WriteLine($"v1 + v2 = {v1 + v2}");
+    Console.WriteLine($"v1 - v2 = {v1 - v2}");
+    Console.WriteLine($"v1 * 3 = {v1 * 3}");
+    Console.WriteLine($"v1 > v2 ? {(v1 > v2 ? "так" : "ні")}");
+
+    var v3 = v1;
+    v3++;
+    Console.WriteLine($"v1 з ++ = {v3}");
+
+    double len = (double)v2;
+    Console.WriteLine($"(double)v2 = {len:F2}  (це довжина вектора)");
+
+    logger.Info("Демонстрація Vector");
+}
+
+void DemoGradePoint()
+{
+    GradePoint g1 = 7.5;
+    GradePoint g2 = 9.0;
+
+    Console.WriteLine($"g1 = {g1}, g2 = {g2}");
+    Console.WriteLine($"g1 + g2 = {g1 + g2}");
+    Console.WriteLine($"g1 > g2 ? {(g1 > g2 ? "так" : "ні")}");
+
+    double d = g2;
+    Console.WriteLine($"g2 як double = {d}");
+
+    if (g2) Console.WriteLine($"g2 ({g2}) - достатня оцінка (оператор true, бо >= 8)");
+    else Console.WriteLine($"g2 ({g2}) - недостатня");
+
+    if (g1) Console.WriteLine($"g1 ({g1}) - достатня оцінка");
+    else Console.WriteLine($"g1 ({g1}) - недостатня (оператор false, бо < 8)");
+
+    logger.Info("Демонстрація GradePoint");
+}
+
+void FindBest()
+{
+    var best = group.BestStudent();
+    if (best is null)
+    {
+        Console.WriteLine("Група порожня.");
+        return;
+    }
+    Console.WriteLine($"Найкращий студент: {best.FullName}");
+    Console.WriteLine($"Середній бал: {best.AverageGrade:F2}, прогрес: {best.CourseProgress}%");
+    logger.Info("Знайдено найкращого студента");
+}
+
+void TestOperators()
+{
+    Console.WriteLine("=== Тестування перевантажених операторів ===");
+
+    Console.WriteLine("\n-- Vector --");
+    var va = new Vector(2, 2, 1);
+    var vb = new Vector(1, 1, 1);
+    Console.WriteLine($"{va} + {vb} = {va + vb}");
+
+    Console.WriteLine("\n-- GradePoint --");
+    GradePoint ga = 8.5;
+    Console.WriteLine($"{ga} достатня? {(ga ? "так" : "ні")}");
+
+    Console.WriteLine("\n-- Fraction (Варіант ПР4) --");
+    var fa = new Fraction(2, 4);
+    var fb = new Fraction(1, 3);
+    Console.WriteLine($"2/4 автоматично скоротилось до {fa}");
+    Console.WriteLine($"{fa} + {fb} = {fa + fb}");
+    Console.WriteLine($"{fa} * {fb} = {fa * fb}");
+
+    Console.WriteLine("\n-- Student --");
+    var students = group.GetAllStudents();
+    if (students.Count >= 2)
+    {
+        var team = students[0] + students[1];
+        Console.WriteLine($"s1 + s2 = \"{team.FullName}\", бал {team.AverageGrade:F2}");
+    }
+
+    logger.Info("Виконано тестування операторів");
+}
+
+void AddRegularStudent()
+{
+    try
+    {
+        Console.Write("ПІБ (три слова): ");
+        string name = Console.ReadLine() ?? "";
+        Console.Write("Номер заліковки (8 цифр): ");
+        string book = Console.ReadLine() ?? "";
+        Console.Write("Рік народження: ");
+        int year = int.TryParse(Console.ReadLine(), out var y) ? y : 2005;
+
+        var student = new Student(name, new DateTime(year, 1, 1), book);
+        student.Enroll();
+        group.AddMember(student);
+        logger.Success($"Додано звичайного студента: {name}");
+        Console.WriteLine($"Додано: {student.GetInfo()}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка: {ex.Message}");
+    }
+}
+
+void AddSpecialStudent()
+{
+    Console.WriteLine("Який тип студента додати?");
+    Console.WriteLine("1. Відмінник (ExcellentStudent)");
+    Console.WriteLine("2. Іноземний студент (ForeignStudent)");
+    Console.WriteLine("3. Працюючий студент (WorkingStudent)");
+    Console.WriteLine("4. Аспірант (GraduateStudent)");
+    Console.Write("Вибір: ");
+    string t = (Console.ReadLine() ?? "").Trim();
+
+    Console.Write("ПІБ (три слова): ");
+    string name = Console.ReadLine() ?? "";
+    Console.Write("Номер заліковки (8 цифр): ");
+    string book = Console.ReadLine() ?? "";
+    Console.Write("Рік народження: ");
+    int year = int.TryParse(Console.ReadLine(), out var y) ? y : 2005;
+    var dob = new DateTime(year, 1, 1);
+
+    try
+    {
+        Student student;
+        if (t == "1")
+        {
+            Console.Write("Досягнення: ");
+            student = new ExcellentStudent(name, dob, book, Console.ReadLine() ?? "");
+        }
+        else if (t == "2")
+        {
+            Console.Write("Країна: ");
+            student = new ForeignStudent(name, dob, book, Console.ReadLine() ?? "");
+        }
+        else if (t == "3")
+        {
+            Console.Write("Компанія: ");
+            string company = Console.ReadLine() ?? "";
+            Console.Write("Годин на тиждень: ");
+            int hours = int.TryParse(Console.ReadLine(), out var h) ? h : 0;
+            student = new WorkingStudent(name, dob, book, company, hours);
+        }
+        else if (t == "4")
+        {
+            Console.Write("Тема дослідження: ");
+            student = new GraduateStudent(name, dob, book, Console.ReadLine() ?? "");
+        }
+        else
+        {
+            Console.WriteLine("Невідомий тип.");
+            return;
+        }
+
+        group.AddMember(student);
+        logger.Success($"Додано {student.GetType().Name}: {name}");
+        Console.WriteLine($"Додано: {student.GetInfo()}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка: {ex.Message}");
+    }
+}
+
+void ShowAllMembers()
+{
+    Console.Write(group.GetMembersInfo());
+    logger.Info("Виведено всіх членів (поліморфізм)");
+}
+
+void CalculateScholarships()
+{
+    Console.WriteLine("Стипендії по членах університету:");
+    foreach (var m in group.GetAllMembers())
+        Console.WriteLine($"  {m.GetInfo()} -> {m.CalculateScholarship()} грн");
+    Console.WriteLine($"\nЗагальна сума стипендій: {group.GetTotalScholarship()} грн");
+    logger.Info("Розраховано стипендії");
+}
+
+void ShowByType()
+{
+    Console.WriteLine($"Відмінників (ExcellentStudent): {group.GetMembersByType<ExcellentStudent>().Count}");
+    Console.WriteLine($"Іноземних (ForeignStudent): {group.GetMembersByType<ForeignStudent>().Count}");
+    Console.WriteLine($"Працюючих (WorkingStudent): {group.GetMembersByType<WorkingStudent>().Count}");
+    Console.WriteLine($"Аспірантів (GraduateStudent): {group.GetMembersByType<GraduateStudent>().Count}");
+    Console.WriteLine($"Усього студентів (Student і похідні): {group.GetMembersByType<Student>().Count}");
+
+    var foreign = group.GetMembersByType<ForeignStudent>();
+    if (foreign.Count > 0)
+    {
+        Console.WriteLine("\nІноземні студенти детально:");
+        foreach (var f in foreign)
+            Console.WriteLine($"  {f.FullName}, країна: {f.Country}");
+    }
+
+    logger.Info("Показано студентів за типом");
+}
+
+void TestHierarchy()
+{
+    Console.WriteLine("=== Тестування ієрархії, base та override ===");
+
+    var ordinary = new Student("Тестенко Тест Тестович", new DateTime(2005, 1, 1), "99999999");
+    ordinary.UpdateAverageGrade(80);
+    var excellent = new ExcellentStudent("Розумний Геній Олександрович", new DateTime(2005, 1, 1), "88888888", "Грант");
+    excellent.UpdateAverageGrade(95);
+    var grad = new GraduateStudent("Науковий Дослідник Іванович", new DateTime(2000, 1, 1), "77777777", "Машинне навчання");
+
+    Console.WriteLine("\nGetInfo() через override (кожен показує своє):");
+    foreach (Student s in new Student[] { ordinary, excellent, grad })
+        Console.WriteLine($"  {s.GetInfo()}");
+
+    Console.WriteLine("\nCalculateScholarship() через override:");
+    Console.WriteLine($"  Звичайний студент (бал 80): {ordinary.CalculateScholarship()} грн");
+    Console.WriteLine($"  Відмінник (бал 95, base + надбавка): {excellent.CalculateScholarship()} грн");
+    Console.WriteLine($"  Аспірант (фіксована): {grad.CalculateScholarship()} грн");
+
+    Console.WriteLine("\nEnroll() через override:");
+    excellent.Enroll();
+
+    logger.Info("Виконано тест ієрархії");
+}
+
+void DemoVehicles()
+{
+    var vehicles = new List<Vehicle>
+    {
+        new Car("Toyota", 200, 4),
+        new Bus("MAN", 120, 50),
+        new Truck("Volvo", 140, 20.5)
+    };
+
+    Console.WriteLine("Транспортні засоби (Варіант 2, поліморфізм через GetInfo):");
+    foreach (var v in vehicles)
+        Console.WriteLine($"  {v.GetInfo()}");
+
+    logger.Info("Демонстрація Vehicle");
+}
+
+void AddShape()
+{
+    var students = group.GetAllStudents();
+    if (students.Count == 0)
+    {
+        Console.WriteLine("Спочатку додайте хоча б одного студента.");
+        return;
+    }
+    var student = students[0];
+
+    Console.WriteLine("Тип фігури: 1 - коло, 2 - прямокутник, 3 - трикутник, 4 - квадрат");
+    Console.Write("Вибір: ");
+    string? type = Console.ReadLine();
+    Console.Write("Колір: ");
+    string color = Console.ReadLine() ?? "чорний";
+
+    Shape shape;
+    try
+    {
+        switch (type)
+        {
+            case "1":
+                Console.Write("Радіус: ");
+                double r = double.Parse(Console.ReadLine() ?? "0");
+                shape = new Circle(color, r);
+                break;
+            case "2":
+                Console.Write("Ширина: ");
+                double w = double.Parse(Console.ReadLine() ?? "0");
+                Console.Write("Висота: ");
+                double h = double.Parse(Console.ReadLine() ?? "0");
+                shape = new Rectangle(color, w, h);
+                break;
+            case "3":
+                Console.Write("Сторона A: ");
+                double a = double.Parse(Console.ReadLine() ?? "0");
+                Console.Write("Сторона B: ");
+                double b = double.Parse(Console.ReadLine() ?? "0");
+                Console.Write("Сторона C: ");
+                double c = double.Parse(Console.ReadLine() ?? "0");
+                shape = new Triangle(color, a, b, c);
+                break;
+            case "4":
+                Console.Write("Сторона: ");
+                double side = double.Parse(Console.ReadLine() ?? "0");
+                shape = new Square(color, side);
+                break;
+            default:
+                Console.WriteLine("Невідомий тип.");
+                return;
+        }
+    }
+    catch
+    {
+        Console.WriteLine("Помилка вводу числа.");
+        return;
+    }
+
+    student.AddProject(shape);
+    Console.WriteLine($"Фігуру додано студенту {student.FullName}: {shape.GetDescription()}");
+    logger.Info("Додано фігуру");
+}
+
+void ShowAllShapes()
+{
+    var shapes = group.GetAllShapes().ToList();
+    if (shapes.Count == 0)
+    {
+        Console.WriteLine("Фігур ще немає.");
+        return;
+    }
+    Console.WriteLine("Усі фігури (поліморфізм через GetDescription):");
+    int i = 1;
+    foreach (var shape in shapes)
+        Console.WriteLine($"  {i++}. {shape.GetDescription()}");
+}
+
+void CalcTotalArea()
+{
+    double total = group.GetTotalAreaOfAllShapes();
+    Console.WriteLine($"Загальна площа всіх фігур ({group.ShapesCount} шт.): {total:F2}");
+}
+
+void ResizeShapes()
+{
+    Console.Write("Коефіцієнт масштабування: ");
+    if (!double.TryParse(Console.ReadLine(), out double factor) || factor <= 0)
+    {
+        Console.WriteLine("Невірний коефіцієнт.");
+        return;
+    }
+    group.ResizeAllShapes(factor);
+    Console.WriteLine($"Усі фігури масштабовано в {factor} раз(и).");
+    logger.Info("Змінено розмір фігур");
+}
+
+void DrawShapes()
+{
+    Console.WriteLine("Малювання всіх фігур:");
+    group.DrawAllShapes();
+}
+
+void PrintShapesInfo()
+{
+    var shapes = group.GetAllShapes().ToList();
+    if (shapes.Count == 0)
+    {
+        Console.WriteLine("Фігур ще немає.");
+        return;
+    }
+    Console.WriteLine("Інформація через інтерфейс IPrintable:");
+    foreach (var shape in shapes)
+    {
+        IPrintable printable = shape;
+        Console.WriteLine($"  {printable.GetPrintInfo()}");
+    }
+}
+
+void DemoDynamicBinding()
+{
+    Console.WriteLine("Демонстрація динамічного (пізнього) зв'язування:");
+    Console.WriteLine("Список має тип List<Shape>, але кожен об'єкт виконує свій метод.");
+
+    List<Shape> shapes = new()
+    {
+        new Circle("червоний", 3),
+        new Rectangle("синій", 4, 5),
+        new Triangle("зелений", 6, 8, 10),
+        new Square("жовтий", 4)
+    };
+
+    foreach (Shape shape in shapes)
+    {
+        Console.WriteLine($"  {shape.GetType().Name}: {shape.GetDescription()}, площа = {shape.CalculateArea():F2}");
+    }
+    logger.Info("Демонстрація динамічного зв'язування");
+}
+
+void DemoPayments()
+{
+    Console.WriteLine("Платежі (Варіант 2, поліморфізм через IPrintable):");
+
+    List<Payment> payments = new()
+    {
+        new CardPayment(1000m, "1234567812345678"),
+        new CashPayment(500m),
+        new CryptoPayment(2000m, "BTC")
+    };
+
+    foreach (Payment payment in payments)
+    {
+        Console.WriteLine($"  {payment.GetPrintInfo()}");
+    }
+
+    decimal totalFees = 0;
+    foreach (var p in payments)
+        totalFees += p.CalculateFee();
+    Console.WriteLine($"Загальна комісія: {totalFees:F2} грн");
+    logger.Info("Демонстрація платежів");
+}
+
+void DemoStructs()
+{
+    Console.WriteLine("Демонстрація структур Point та GradeRecord:");
+    Console.WriteLine();
+
+    var p1 = new Point(2, 3);
+    var p2 = new Point(2, 3);
+    var p3 = new Point(5, 1);
+    Console.WriteLine($"Point p1 = {p1}");
+    Console.WriteLine($"Point p2 = {p2}");
+    Console.WriteLine($"Point p3 = {p3}");
+    Console.WriteLine($"p1 == p2: {p1 == p2}");
+    Console.WriteLine($"p1 == p3: {p1 == p3}");
+
+    var (x, y) = p1;
+    Console.WriteLine($"Deconstruct p1: x={x}, y={y}");
+
+    Console.WriteLine();
+    var g1 = new GradeRecord("Програмування", 95, DateTime.Now);
+    Console.WriteLine($"GradeRecord = {g1}");
+    var (subj, grade) = g1;
+    Console.WriteLine($"Deconstruct: предмет={subj}, оцінка={grade}");
+    logger.Info("Демонстрація структур");
+}
+
+void ComparePerformance()
+{
+    var test = new PerformanceTest();
+    test.Run(50000);
+    logger.Info("Порівняння продуктивності struct vs class");
+}
+
+void ConvertToRecord()
+{
+    var students = group.GetAllStudents();
+    if (students.Count == 0)
+    {
+        Console.WriteLine("Немає студентів.");
+        return;
+    }
+    var student = students[0];
+    StudentRecord record = student.GetRecord();
+    Console.WriteLine("Клас Student перетворено у легку структуру StudentRecord:");
+    Console.WriteLine($"  {record}");
+    var (name, book, avg) = record;
+    Console.WriteLine($"  Deconstruct: {name}, заліковка {book}, бал {avg:F2}");
+    logger.Info("Перетворення у StudentRecord");
+}
+
+void ShowGradeHistory()
+{
+    group.OptimizeStorage();
+    var history = group.GetGradeHistory();
+    if (history.Length == 0)
+    {
+        Console.WriteLine("Історія оцінок порожня.");
+        return;
+    }
+    Console.WriteLine($"Історія оцінок через масив структур GradeRecord ({history.Length} записів):");
+    foreach (var record in history)
+        Console.WriteLine($"  {record}");
+    logger.Info("Показ історії оцінок через структури");
+}
+
+void TestEquals()
+{
+    Console.WriteLine("Тест Equals та IEquatable<T>:");
+    Console.WriteLine();
+
+    var a = new Point(1, 1);
+    var b = new Point(1, 1);
+    var c = new Point(9, 9);
+    Console.WriteLine($"a = {a}, b = {b}, c = {c}");
+    Console.WriteLine($"a.Equals(b): {a.Equals(b)} (IEquatable)");
+    Console.WriteLine($"a == b: {a == b}");
+    Console.WriteLine($"a != c: {a != c}");
+    Console.WriteLine($"a.GetHashCode() == b.GetHashCode(): {a.GetHashCode() == b.GetHashCode()}");
+
+    Console.WriteLine();
+    var r1 = new StudentRecord("Іваненко Іван Іванович", "111", 90);
+    var r2 = new StudentRecord("Іваненко Іван Іванович", "111", 90);
+    Console.WriteLine($"StudentRecord r1 == r2: {r1 == r2}");
+    logger.Info("Тест Equals та IEquatable");
+}
+
+void OptimizeStorage()
+{
+    group.OptimizeStorage();
+    Console.WriteLine("Дані групи оптимізовано (частину переведено у масиви структур):");
+    Console.WriteLine($"  Лабораторні місця (Point[]): {group.GetLabSeats().Length}");
+    Console.WriteLine($"  Історія оцінок (GradeRecord[]): {group.GetGradeHistory().Length}");
+
+    var seats = group.GetLabSeats();
+    if (seats.Length > 0)
+    {
+        Console.WriteLine("  Приклади лабораторних місць (ряд, місце):");
+        for (int i = 0; i < Math.Min(5, seats.Length); i++)
+            Console.WriteLine($"    {seats[i]}");
+    }
+    logger.Info("Оптимізація зберігання даних групи");
+}
+
+void DemoMoney()
+{
+    Console.WriteLine("Демонстрація структури Money (Варіант 2):");
+    Console.WriteLine();
+
+    var m1 = new Money(150.50m, "UAH");
+    var m2 = new Money(99.50m, "UAH");
+    Console.WriteLine($"m1 = {m1}");
+    Console.WriteLine($"m2 = {m2}");
+    Console.WriteLine($"m1 + m2 = {m1 + m2}");
+    Console.WriteLine($"m1 - m2 = {m1 - m2}");
+    Console.WriteLine($"m1 * 2 = {m1 * 2}");
+    Console.WriteLine($"m1 > m2: {m1 > m2}");
+    Console.WriteLine($"m1 == m2: {m1 == m2}");
+
+    var (amount, currency) = m1;
+    Console.WriteLine($"Deconstruct m1: сума={amount}, валюта={currency}");
+    logger.Info("Демонстрація Money");
+}
+
+void SaveGroupJson()
+{
+    var fm = new FileManager();
+    fm.EnsureDirectories();
+    string path = Path.Combine("Reports", "group.json");
+    try
+    {
+        group.Save(path, StorageFormat.Json);
+        Console.WriteLine($"Групу збережено у JSON: {path}");
+        logger.Info("Збереження групи у JSON");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка збереження: {ex.Message}");
+    }
+}
+
+void LoadGroupJson()
+{
+    string path = Path.Combine("Reports", "group.json");
+    try
+    {
+        var loaded = StudentGroup.Load(path, StorageFormat.Json);
+        Console.WriteLine($"Групу завантажено з JSON. Студентів: {loaded.GetAllStudents().Count}");
+        foreach (var s in loaded.GetAllStudents())
+            Console.WriteLine($"  {s.FullName} (№{s.RecordBookNumber}), бал {s.AverageGrade:F2}");
+        logger.Info("Завантаження групи з JSON");
+    }
+    catch (FileNotFoundException)
+    {
+        Console.WriteLine("Файл group.json не знайдено. Спочатку збережіть групу (пункт 47).");
+    }
+    catch (InvalidFileFormatException ex)
+    {
+        Console.WriteLine($"Невірний формат файлу: {ex.Message}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка завантаження: {ex.Message}");
+    }
+}
+
+void ExportGradesCsv()
+{
+    string path = Path.Combine("Reports", "grades.csv");
+    try
+    {
+        group.ExportGradesToCsv(path);
+        Console.WriteLine($"Оцінки експортовано у CSV: {path}");
+        logger.Info("Експорт оцінок у CSV");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка експорту: {ex.Message}");
+    }
+}
+
+void SaveReportText()
+{
+    var fm = new FileManager();
+    fm.EnsureDirectories();
+    string path = Path.Combine("Reports", "report.txt");
+    try
+    {
+        group.Save(path, StorageFormat.Text);
+        Console.WriteLine($"Звіт збережено у текстовий файл: {path}");
+        logger.Info("Збереження звіту у текстовий файл");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка збереження: {ex.Message}");
+    }
+}
+
+void CreateBackupFile()
+{
+    var fm = new FileManager();
+    fm.EnsureDirectories();
+    string source = Path.Combine("Reports", "group.json");
+    if (!File.Exists(source))
+        group.Save(source, StorageFormat.Json);
+    try
+    {
+        fm.CreateBackup(source);
+        Console.WriteLine("Резервну копію створено у папці Backups.");
+        logger.Info("Створення резервної копії");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка створення копії: {ex.Message}");
+    }
+}
+
+void ViewBackups()
+{
+    var fm = new FileManager();
+    fm.EnsureDirectories();
+    string[] files = fm.ListFiles("Backups");
+    if (files.Length == 0)
+    {
+        Console.WriteLine("Папка Backups порожня.");
+        return;
+    }
+    Console.WriteLine($"Файли в папці Backups ({files.Length}):");
+    foreach (string file in files)
+    {
+        var info = new FileInfo(file);
+        Console.WriteLine($"  {info.Name} ({info.Length} байт, {info.LastWriteTime:dd.MM.yyyy HH:mm})");
+    }
+}
+
+void ImportStudentsText()
+{
+    var fm = new FileManager();
+    fm.EnsureDirectories();
+    string path = Path.Combine("Reports", "import.txt");
+
+    if (!File.Exists(path))
+    {
+        fm.SaveToText("Новий Студент Перший\nНовий Студент Другий", path);
+        Console.WriteLine($"Створено зразковий файл {path}. Натисніть пункт ще раз для імпорту.");
+        return;
+    }
+
+    try
+    {
+        string content = fm.ReadFromText(path);
+        group.ImportStudentsFromText(content);
+        Console.WriteLine($"Студентів імпортовано з текстового файлу. Всього у групі: {group.GetAllStudents().Count}");
+        logger.Info("Імпорт студентів з текстового файлу");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка імпорту: {ex.Message}");
+    }
+}
+
+void CleanBackups()
+{
+    Console.Write("Видалити бекапи, старші за скільки днів: ");
+    if (!int.TryParse(Console.ReadLine(), out int days) || days < 0)
+    {
+        Console.WriteLine("Невірне число.");
+        return;
+    }
+    var fm = new FileManager();
+    fm.CleanOldBackups(days);
+    Console.WriteLine($"Бекапи, старші за {days} днів, видалено.");
+    logger.Info("Очищення старих бекапів");
+}
+
+void TestExceptions()
+{
+    Console.WriteLine("Тестування обробки винятків при роботі з файлами:");
+    var fm = new FileManager();
+
+    try
+    {
+        fm.ReadFromText("неіснуючий_файл.txt");
+    }
+    catch (FileNotFoundException ex)
+    {
+        Console.WriteLine($"  Спіймано FileNotFoundException: {ex.Message}");
+    }
+
+    try
+    {
+        string badPath = Path.Combine("Reports", "bad.json");
+        fm.EnsureDirectories();
+        fm.SaveToText("{ це не валідний json ", badPath);
+        fm.LoadFromJson<List<StudentDto>>(badPath);
+    }
+    catch (InvalidFileFormatException ex)
+    {
+        Console.WriteLine($"  Спіймано InvalidFileFormatException: {ex.Message}");
+    }
+
+    Console.WriteLine("Усі винятки оброблено коректно, програма не впала.");
+    logger.Info("Тестування обробки винятків");
+}
+
+void ImportStudentsCsv()
+{
+    var fm = new FileManager();
+    fm.EnsureDirectories();
+    string path = Path.Combine("Reports", "students.csv");
+
+    if (!File.Exists(path))
+    {
+        var sample = "ПІБ;Номер залікової;Середній бал\n"
+                   + "Новаков Новак Новакович;33333333;88\n"
+                   + "Тестенко Тест Тестович;44444444;72";
+        fm.SaveToText(sample, path);
+        Console.WriteLine($"Створено зразковий CSV {path}. Натисніть пункт ще раз для імпорту.");
+        return;
+    }
+
+    try
+    {
+        int count = group.ImportStudentsFromCsv(path);
+        Console.WriteLine($"Імпортовано з CSV студентів: {count}. Всього у групі: {group.GetAllStudents().Count}");
+        logger.Info("Імпорт студентів з CSV (Варіант 2)");
+    }
+    catch (FileNotFoundException)
+    {
+        Console.WriteLine("CSV файл не знайдено.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Помилка імпорту: {ex.Message}");
+    }
+}
