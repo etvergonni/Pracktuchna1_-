@@ -98,5 +98,5 @@ public static bool operator !=(Point a, Point b) => !a.Equals(b);
 - **Тег:** v7.0
 
 ### Граф гілок
+<img width="1280" height="659" alt="image" src="https://github.com/user-attachments/assets/b721d422-4389-4ffa-8104-a8d9ad1b6b86" />
 
-(ВСТАВИТИ СЮДИ СКРИНШОТ ГРАФА git log --oneline --graph --all)
