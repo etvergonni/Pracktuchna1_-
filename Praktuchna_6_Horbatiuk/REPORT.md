@@ -110,7 +110,7 @@ public double GetTotalAreaOfAllShapes()
 
 - **Репозиторій:** https://github.com/etvergonni/Praktychni_Horbatiuk
 - **Кількість гілок (ПР №6):** 9 (develop, feature/polymorphism-base, feature/shape-hierarchy, feature/interfaces, feature/student-shapes-integration, feature/group-polymorphism, feature/menu-polymorphism, feature/variant-2, refactor/polymorphism-cleanup)
-- **Кількість комітів (ПР №6):** (ЗАПОВНИТИ після git)
+- **Кількість комітів (ПР №6):** 19
 - **Стратегія злиття:** git merge --no-ff для всіх гілок, застосовано git rebase для чищення історії
 - **Тег:** v6.0
 
